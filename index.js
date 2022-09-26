@@ -3,7 +3,6 @@ dotenv.config();
 const express = require("express");
 const app = express();
 const cors = require(`cors`);
-app.use(cors());
 const mongoose = require("mongoose");
 const userRoute = require("./routes/userRoute");
 const authRoute = require("./routes/authRoute");
@@ -11,6 +10,7 @@ const productRoute = require(`./routes/productRoute`);
 const cartRoute = require(`./routes/cartRoute`);
 const orderRoute = require(`./routes/orderRoute`);
 const stripeRoute = require(`./routes/stripeRouter`);
+app.use(cors());
 
 mongoose
   .connect(process.env.MONGO_URL)
@@ -25,6 +25,10 @@ app.use(`/api/products`, productRoute);
 app.use(`/api/carts`, cartRoute);
 app.use(`/api/orders`, orderRoute);
 app.use(`/api/checkout`, stripeRoute);
+
+app.use("/", (req, res) => {
+  res.status(200).json(`Homepage is here.`);
+});
 
 app.listen(process.env.PORT || 5001, () => {
   console.log(`Server is running on ${process.env.PORT || 5001}.`);
